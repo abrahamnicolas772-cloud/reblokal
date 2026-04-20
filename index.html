@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
+        /* ---------- RESET & VARIABLES ---------- */
         * {
             margin: 0;
             padding: 0;
@@ -42,7 +43,7 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
-        /* Texture subtile */
+        /* texture subtile */
         body::before {
             content: "";
             position: fixed;
@@ -76,7 +77,7 @@
             margin: 0 auto;
             padding: 0 1.2rem;
         }
-        /* ---------- NAVBAR MODERNE (hamburger) ---------- */
+        /* ---------- NAVBAR MODERNE (HAMBURGER) ---------- */
         .navbar {
             position: sticky;
             top: 0;
@@ -142,7 +143,7 @@
             gap: 0.4rem;
             white-space: nowrap;
         }
-        /* ---------- HERO (type app) ---------- */
+        /* ---------- HERO (app style) ---------- */
         .hero {
             min-height: 85vh;
             display: flex;
@@ -234,7 +235,7 @@
             cursor: pointer;
             z-index: 2;
         }
-        /* ---------- PARTENAIRES (style app) ---------- */
+        /* ---------- PARTENAIRES ---------- */
         .partners-section {
             padding: 2rem 0;
             background: var(--cream-bg);
@@ -309,7 +310,7 @@
             padding: 0.6rem 0.8rem;
             border-radius: 20px;
         }
-        /* ---------- CATALOGUE (app grid) ---------- */
+        /* ---------- CATALOGUE (grille adaptative) ---------- */
         .catalogue-section {
             padding: 3rem 0;
             background: var(--cream-bg);
@@ -419,7 +420,7 @@
         }
         .testimonials-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 1.2rem;
         }
         .testimonial-card {
@@ -478,7 +479,7 @@
             font-size: 0.85rem;
             line-height: 1.5;
         }
-        /* ---------- CONTACT (app like) ---------- */
+        /* ---------- CONTACT ---------- */
         .contact-section {
             padding: 3rem 0;
             background: var(--forest-deep);
@@ -545,7 +546,7 @@
         footer p {
             font-size: 0.7rem;
         }
-        /* ---------- RESPONSIVE (menu hamburger) ---------- */
+        /* ---------- RESPONSIVE (MENU HAMBURGER) ---------- */
         @media (max-width: 768px) {
             .menu-toggle {
                 display: flex;
@@ -583,7 +584,32 @@
                 margin-top: 0.5rem;
             }
         }
-        /* Animation reveal */
+        /* Desktop : affichage normal */
+        @media (min-width: 769px) {
+            .savoir-grid {
+                flex-direction: row;
+                text-align: left;
+            }
+            .savoir-text {
+                text-align: left;
+            }
+            .gold-bullet li {
+                justify-content: flex-start;
+            }
+            .contact-wrapper {
+                flex-direction: row;
+            }
+            .contact-header {
+                text-align: left;
+            }
+            .catalogue-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+            .testimonials-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        /* Animations reveal */
         .reveal {
             opacity: 0;
             transform: translateY(20px);
@@ -742,7 +768,7 @@
 </footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    // Données produits
+    // ---------- PRODUITS ----------
     const products = [
         { name: "Ji Kann", desc: "Ji kann natirèl, fre e rafrechisan.", category: "Ji", img: "jikann.jpg" },
         { name: "Poud Jenjanm", desc: "Poud jenjanm natirèl, fèt ak rasin jenjanm sèk.", category: "Epis", img: "poud jenjanm.jpg" },
@@ -780,6 +806,7 @@
             `;
             productGrid.appendChild(card);
         });
+        // Événements après rendu
         document.querySelectorAll('.find-location').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.getElementById('partenaires').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -803,7 +830,7 @@
     });
     renderProducts('all');
 
-    // Carte Leaflet
+    // ---------- CARTE LEAFLET ----------
     const map = L.map('map').setView([18.5944, -72.3074], 8);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> & CartoDB',
@@ -829,7 +856,7 @@
     markers.push(usine);
     window.markers = markers;
 
-    // Formulaire WhatsApp
+    // ---------- FORMULAIRE WHATSAPP ----------
     const form = document.getElementById('whatsappForm');
     const feedback = document.getElementById('waFeedback');
     form.addEventListener('submit', (e) => {
@@ -850,20 +877,19 @@
         form.reset();
     });
 
-    // Menu hamburger
+    // ---------- MENU HAMBURGER ----------
     const menuToggle = document.getElementById('menuToggle');
     const navLinks = document.getElementById('navLinks');
     menuToggle.addEventListener('click', () => {
         navLinks.classList.toggle('open');
     });
-    // Ferme menu après clic sur lien
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', () => {
             navLinks.classList.remove('open');
         });
     });
 
-    // Animations reveal
+    // ---------- ANIMATIONS REVEAL ----------
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -872,7 +898,7 @@
     }, { threshold: 0.1 });
     reveals.forEach(el => observer.observe(el));
 
-    // Son vidéo
+    // ---------- SON VIDEO ----------
     const video = document.getElementById('heroVideo');
     const unmuteBtn = document.getElementById('unmuteBtn');
     if (video && unmuteBtn) {
