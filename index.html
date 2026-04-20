@@ -2,21 +2,21 @@
 <html lang="ht">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
     <meta name="description" content="REB Lokal - Ekselans agrikòl Ayisyen. Dekouvri pwodwi nou yo, savwa fè nou, epi vin patnè.">
     <meta name="theme-color" content="#0A1D17">
     <title>REB Lokal | Ekselans Agrikòl Ayisyen</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        /* ---------- RESET ---------- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
         :root {
             --forest-deep: #0A1D17;
@@ -28,19 +28,21 @@
             --cream-bg: #FBF7F0;
             --text-light: #FEFCF8;
             --text-muted: #D4CFC4;
-            --border-gold-light: rgba(205, 167, 92, 0.25);
-            --shadow-md: 0 20px 35px -12px rgba(0,0,0,0.4);
-            --transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            --border-gold-light: rgba(205, 167, 92, 0.2);
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.15);
+            --transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             --green-wa: #25D366;
         }
         body {
             background-color: var(--forest-deep);
             color: var(--text-light);
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.5;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
+        /* Texture subtile */
         body::before {
             content: "";
             position: fixed;
@@ -49,7 +51,7 @@
             width: 100%;
             height: 100%;
             background-image: radial-gradient(rgba(205,167,92,0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-size: 32px 32px;
             pointer-events: none;
             z-index: -1;
         }
@@ -59,57 +61,74 @@
             letter-spacing: -0.02em;
         }
         h2 {
-            font-size: clamp(1.8rem, 6vw, 2.8rem);
-            color: var(--aged-gold);
-            margin-bottom: 1rem;
+            font-size: clamp(1.6rem, 6vw, 2.4rem);
+            margin-bottom: 0.8rem;
         }
         .section-subtitle {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             border-left: 3px solid var(--terracotta);
-            padding-left: 1rem;
-            margin-bottom: 2rem;
+            padding-left: 0.8rem;
+            margin-bottom: 1.8rem;
         }
         .container {
-            max-width: 1300px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1.5rem;
+            padding: 0 1.2rem;
         }
-        /* ---------- NAVBAR (responsif) ---------- */
+        /* ---------- NAVBAR MODERNE (hamburger) ---------- */
         .navbar {
             position: sticky;
             top: 0;
-            backdrop-filter: blur(12px);
-            background: rgba(10, 29, 23, 0.92);
+            backdrop-filter: blur(16px);
+            background: rgba(10, 29, 23, 0.88);
             border-bottom: 1px solid var(--border-gold-light);
             z-index: 1000;
-            padding: 0.8rem 0;
+            padding: 0.7rem 0;
         }
         .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 0.8rem;
         }
         .logo-img {
-            height: 45px;
+            height: 40px;
             width: auto;
             transition: transform 0.2s;
         }
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: var(--aged-gold);
+            font-size: 1.8rem;
+            cursor: pointer;
+            display: none;
+            width: 44px;
+            height: 44px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 30px;
+            transition: background 0.2s;
+        }
+        .menu-toggle:active {
+            background: rgba(205,167,92,0.2);
+        }
         .nav-links {
             display: flex;
-            gap: 1.2rem;
+            gap: 1.8rem;
             list-style: none;
-            flex-wrap: wrap;
-            justify-content: center;
+            align-items: center;
         }
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
             font-weight: 500;
+            font-size: 0.9rem;
             transition: color 0.2s;
-            font-size: 0.85rem;
+            padding: 0.4rem 0;
+        }
+        .nav-links a:hover {
+            color: var(--aged-gold);
         }
         .btn-achte {
             background: var(--green-wa);
@@ -117,21 +136,19 @@
             padding: 0.4rem 1.2rem;
             border-radius: 40px;
             font-weight: 600;
-            text-decoration: none;
             font-size: 0.85rem;
-            transition: var(--transition);
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
             white-space: nowrap;
         }
-        /* ---------- HERO (mobil) ---------- */
+        /* ---------- HERO (type app) ---------- */
         .hero {
             min-height: 85vh;
             display: flex;
             align-items: center;
             padding: 2rem 0;
-            background: linear-gradient(115deg, rgba(10,29,23,0.85), rgba(15,42,33,0.75)), url('champ.jpg');
+            background: linear-gradient(115deg, rgba(10,29,23,0.92), rgba(15,42,33,0.85)), url('champ.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -139,18 +156,22 @@
         .hero .container {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
+            gap: 2rem;
         }
         .hero-content {
             text-align: center;
             width: 100%;
         }
         .hero h1 {
-            font-size: clamp(1.8rem, 7vw, 3rem);
+            font-size: clamp(1.8rem, 8vw, 3rem);
+            color: white;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            margin-bottom: 0.8rem;
         }
         .hero p {
             font-size: 0.9rem;
+            color: var(--cream-bg);
+            margin-bottom: 1.5rem;
         }
         .btn-group {
             display: flex;
@@ -159,194 +180,418 @@
             flex-wrap: wrap;
         }
         .btn-terracotta, .btn-outline-gold {
-            padding: 0.6rem 1.2rem;
+            padding: 0.7rem 1.4rem;
+            border-radius: 50px;
+            font-weight: 600;
             font-size: 0.85rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-terracotta {
+            background: var(--terracotta);
+            color: white;
+            border: none;
+        }
+        .btn-terracotta:active {
+            transform: scale(0.97);
+        }
+        .btn-outline-gold {
+            background: transparent;
+            border: 1.5px solid var(--aged-gold);
+            color: var(--aged-gold);
         }
         .hero-video {
             width: 100%;
-            max-width: 400px;
+            max-width: 340px;
             margin: 0 auto;
-            min-height: 220px;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-gold-light);
+            position: relative;
         }
-        /* ---------- PARTENAIRES (mobil) ---------- */
+        .hero-video video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .unmute-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            border: none;
+            border-radius: 30px;
+            padding: 6px 12px;
+            font-size: 11px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 2;
+        }
+        /* ---------- PARTENAIRES (style app) ---------- */
         .partners-section {
             padding: 2rem 0;
+            background: var(--cream-bg);
+        }
+        .partners-header {
+            text-align: center;
+            margin-bottom: 1.2rem;
+        }
+        .partners-header h3 {
+            font-size: 1.3rem;
+            color: var(--terracotta);
+        }
+        .partners-header p {
+            font-size: 0.75rem;
+            color: var(--forest-medium);
         }
         .partners-logos {
-            gap: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
         }
         .partner-logo {
-            padding: 0.3rem 0.8rem;
+            background: rgba(0,0,0,0.02);
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            transition: all 0.2s;
         }
         .partner-logo img {
-            max-height: 35px;
+            max-height: 32px;
+            width: auto;
+            opacity: 0.7;
         }
-        /* ---------- SAVOIR-FAIRE (mobil) ---------- */
+        /* ---------- SAVOIR-FAIRE ---------- */
         .savoir-section {
             padding: 3rem 0;
+            background: linear-gradient(135deg, var(--forest-deep), var(--forest-riche));
         }
         .savoir-grid {
+            display: flex;
             flex-direction: column;
             gap: 2rem;
+        }
+        .savoir-image {
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+        .savoir-image img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
         .savoir-text {
             text-align: center;
         }
-        .gold-bullet li {
-            justify-content: center;
-            text-align: left;
-            font-size: 0.85rem;
-            padding: 0.5rem 0.8rem;
+        .savoir-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
         }
-        /* ---------- CATALOGUE (mobil) ---------- */
+        .gold-bullet {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        .gold-bullet li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.85rem;
+            background: rgba(205,167,92,0.08);
+            padding: 0.6rem 0.8rem;
+            border-radius: 20px;
+        }
+        /* ---------- CATALOGUE (app grid) ---------- */
         .catalogue-section {
             padding: 3rem 0;
+            background: var(--cream-bg);
         }
         .filter-buttons {
-            gap: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-bottom: 1.8rem;
         }
         .filter-btn {
-            padding: 0.3rem 0.8rem;
+            background: transparent;
+            border: 1.5px solid var(--terracotta);
+            color: var(--terracotta);
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            font-weight: 600;
             font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-btn.active, .filter-btn:active {
+            background: var(--terracotta);
+            color: white;
         }
         .catalogue-grid {
-            grid-template-columns: 1fr;
-            gap: 1.2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1rem;
         }
         .product-card {
-            max-width: 100%;
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .product-card:active {
+            transform: scale(0.98);
         }
         .product-img {
-            height: 180px;
+            height: 140px;
+            overflow: hidden;
+        }
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .product-info {
+            padding: 0.8rem;
         }
         .product-info h4 {
-            font-size: 1.1rem;
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+            color: var(--terracotta);
         }
         .product-desc {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
+            color: #555;
+            margin-bottom: 0.8rem;
+        }
+        .card-buttons {
+            display: flex;
+            gap: 0.5rem;
         }
         .btn-dual {
-            padding: 0.4rem 0.7rem;
+            background: var(--terracotta);
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 30px;
             font-size: 0.65rem;
+            font-weight: 600;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
         }
-        /* ---------- MAP (mobil) ---------- */
+        /* ---------- MAP ---------- */
         .map-section {
             padding: 3rem 0;
+            background: linear-gradient(135deg, var(--forest-deep), var(--forest-riche));
         }
         .map-container {
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid var(--aged-gold);
             height: 280px;
+            width: 100%;
+            box-shadow: var(--shadow-md);
         }
         .map-info-text {
-            font-size: 0.75rem;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
             padding: 0.6rem 1rem;
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.75rem;
         }
-        /* ---------- TEMOIGNAGES (mobil) ---------- */
+        /* ---------- TÉMOIGNAGES ---------- */
         .testimonials-section {
             padding: 3rem 0;
+            background: var(--cream-bg);
         }
         .testimonials-grid {
+            display: grid;
             grid-template-columns: 1fr;
             gap: 1.2rem;
         }
         .testimonial-card {
+            background: white;
+            border-radius: 28px;
             padding: 1.2rem;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .testimonial-card:active {
+            transform: scale(0.98);
         }
         .testimonial-img {
             width: 70px;
             height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 0.8rem;
+            border: 2px solid var(--terracotta);
         }
         .testimonial-card p {
             font-size: 0.85rem;
+            color: #333;
+            margin-bottom: 0.8rem;
         }
-        /* ---------- PDG (mobil) ---------- */
+        .testimonial-card h4 {
+            font-size: 1rem;
+        }
+        /* ---------- PDG ---------- */
         .pdg-section {
             padding: 3rem 0;
+            background: linear-gradient(135deg, var(--forest-deep), var(--forest-riche));
         }
         .pdg-wrapper {
+            display: flex;
             flex-direction: column;
+            align-items: center;
             text-align: center;
-            padding: 1.5rem;
             gap: 1.2rem;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(4px);
+            border-radius: 32px;
+            padding: 1.5rem;
         }
         .pdg-image img {
-            max-width: 140px;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--terracotta);
         }
         .pdg-text h3 {
-            font-size: 1.4rem;
-        }
-        .pdg-title {
-            font-size: 0.9rem;
+            font-size: 1.3rem;
         }
         .pdg-text p {
             font-size: 0.85rem;
+            line-height: 1.5;
         }
-        /* ---------- CONTACT (mobil) ---------- */
+        /* ---------- CONTACT (app like) ---------- */
         .contact-section {
             padding: 3rem 0;
+            background: var(--forest-deep);
         }
         .contact-header {
             text-align: center;
+            margin-bottom: 1.5rem;
         }
         .contact-wrapper {
+            display: flex;
             flex-direction: column;
-            padding: 1.2rem;
             gap: 1.5rem;
+            background: var(--forest-medium);
+            border-radius: 32px;
+            padding: 1.5rem;
         }
         .contact-info h3 {
             font-size: 1.2rem;
+            margin-bottom: 0.8rem;
         }
         .contact-info p {
             font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.6rem;
         }
         .contact-form input, .contact-form textarea {
-            padding: 0.6rem;
+            width: 100%;
+            padding: 0.7rem;
+            background: rgba(10,29,23,0.8);
+            border: 1px solid var(--border-gold-light);
+            border-radius: 24px;
+            color: white;
             font-size: 0.8rem;
+            margin-bottom: 0.8rem;
         }
         .contact-form button {
-            padding: 0.6rem;
-            font-size: 0.85rem;
+            background: var(--terracotta);
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 40px;
+            font-weight: bold;
+            border: none;
+            color: white;
+            cursor: pointer;
         }
-        /* ---------- FOOTER (mobil) ---------- */
+        /* ---------- FOOTER ---------- */
         footer {
+            background: #071712;
             padding: 1.5rem 0;
+            text-align: center;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 0.8rem;
         }
         .social-icons a {
+            color: var(--aged-gold);
             font-size: 1.2rem;
         }
         footer p {
             font-size: 0.7rem;
         }
-        /* ---------- ANIMATIONS ---------- */
+        /* ---------- RESPONSIVE (menu hamburger) ---------- */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+            .nav-links {
+                position: fixed;
+                top: 65px;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 29, 23, 0.98);
+                backdrop-filter: blur(16px);
+                flex-direction: column;
+                padding: 1.2rem;
+                gap: 1rem;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                z-index: 999;
+                border-bottom: 1px solid var(--border-gold-light);
+                border-radius: 0 0 20px 20px;
+            }
+            .nav-links.open {
+                transform: translateX(0);
+            }
+            .nav-links li {
+                width: 100%;
+                text-align: center;
+            }
+            .nav-links a {
+                display: block;
+                padding: 0.8rem;
+                font-size: 1rem;
+            }
+            .btn-achte {
+                display: inline-block;
+                margin-top: 0.5rem;
+            }
+        }
+        /* Animation reveal */
         .reveal {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* Responsive supplémentaires */
-        @media (max-width: 600px) {
-            .container {
-                padding: 0 1rem;
-            }
-            .nav-links {
-                order: 3;
-                width: 100%;
-                justify-content: center;
-                margin-top: 0.5rem;
-            }
-            .btn-achte {
-                order: 2;
-            }
-            .logo-link {
-                order: 1;
-            }
         }
     </style>
 </head>
@@ -354,13 +599,14 @@
 <nav class="navbar">
     <div class="container nav-container">
         <a href="#akèy" class="logo-link"><img src="reblokallogo.png" alt="REB Lokal" class="logo-img"></a>
-        <ul class="nav-links">
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+        <ul class="nav-links" id="navLinks">
             <li><a href="#akèy">Akèy</a></li>
             <li><a href="#savoir-faire">Sa nou fè</a></li>
             <li><a href="#catalogue">Katalòg</a></li>
             <li><a href="#partenaires">Patenè nou yo</a></li>
+            <li><a href="https://wa.me/50912345678?text=Bonjour%2C%20je%20souhaite%20échanger%20avec%20REB%20Lokal" target="_blank" rel="noopener noreferrer" class="btn-achte"><i class="fab fa-whatsapp"></i> ACHTE</a></li>
         </ul>
-        <a href="https://wa.me/50912345678?text=Bonjour%2C%20je%20souhaite%20échanger%20avec%20REB%20Lokal" target="_blank" rel="noopener noreferrer" class="btn-achte"><i class="fab fa-whatsapp"></i> ACHTE</a>
     </div>
 </nav>
 <main>
@@ -378,7 +624,7 @@
                 <video id="heroVideo" autoplay loop muted playsinline>
                     <source src="reblokalvideo.mp4" type="video/mp4">
                 </video>
-                <button id="unmuteBtn" class="unmute-btn" style="display: none;"><i class="fas fa-volume-up"></i> Aktive son</button>
+                <button id="unmuteBtn" class="unmute-btn" style="display: none;"><i class="fas fa-volume-up"></i> Son</button>
             </div>
         </div>
     </section>
@@ -396,13 +642,13 @@
             <div class="savoir-grid">
                 <div class="savoir-image"><img src="machine.jpg" alt="Machin agrikòl" loading="lazy"></div>
                 <div class="savoir-text">
-                    <h3>TRASABILITE AK KALITE :<br> Soti nan tè nou rive nan tab ou.</h3>
-                    <p class="savoir-intro">Nan REB Lokal, nou mete tout konesans ak pasyon nou pou nou ofri pwodwi ki soti nan tè Ayisyen an ak yon kalite eksepsyonèl. Chak etap, soti nan seleksyon jiskaske ou rive jwenn li, fèt ak respè pou anviwònman an ak pou tradisyon yo.</p>
+                    <h3>TRASABILITE AK KALITE</h3>
+                    <p class="savoir-intro">Nan REB Lokal, nou mete tout konesans ak pasyon nou pou nou ofri pwodwi ki soti nan tè Ayisyen an ak yon kalite eksepsyonèl.</p>
                     <ul class="gold-bullet">
                         <li><i class="fas fa-check-circle"></i> <strong>SELEKSYON RIGOURE</strong> — Seleksyon strik pwodwi lokal yo.</li>
                         <li><i class="fas fa-flask"></i> <strong>TRANSFORMASYON Ijyenik</strong> — Pwosesis teknik ak ijyenik.</li>
                         <li><i class="fas fa-chart-line"></i> <strong>ESPÈT TEKNIK</strong> — Akonpayman pa agwonòm pasyonè.</li>
-                        <li><i class="fas fa-map-marker-alt"></i> <strong>TERWA EXKESPNSYONÈL</strong> — Trasabilite total, depi jaden rive atelye.</li>
+                        <li><i class="fas fa-map-marker-alt"></i> <strong>TERWA EXKESPNSYONÈL</strong> — Trasabilite total.</li>
                     </ul>
                 </div>
             </div>
@@ -411,7 +657,7 @@
     <section id="catalogue" class="catalogue-section reveal">
         <div class="container">
             <h2>Katalòg entèraktif</h2>
-            <div class="section-subtitle">Chwazi kategori pwodwi ou vle</div>
+            <div class="section-subtitle">Chwazi kategori</div>
             <div class="filter-buttons" id="filterButtons">
                 <button class="filter-btn active" data-category="all">Tout</button>
                 <button class="filter-btn" data-category="Ji">Ji</button>
@@ -429,7 +675,7 @@
             <h2>Patenè nou yo</h2>
             <div class="section-subtitle">Jwenn REB Lokal nan tout rejyon an</div>
             <div id="map" class="map-container"></div>
-            <div class="map-info-text"><i class="fas fa-industry" style="color:var(--aged-gold); margin-right:6px;"></i> <strong>Santral REB Lokal</strong> : Jeremi, Grandans — Distribisyon nan tout depatman Sid ak plizyè kote nan Grandans.</div>
+            <div class="map-info-text"><i class="fas fa-industry"></i> Santral REB Lokal : Jeremi, Grandans — Distribisyon nan Sid ak Grandans.</div>
         </div>
     </section>
     <section class="testimonials-section reveal">
@@ -437,9 +683,9 @@
             <h2>Sa yo di</h2>
             <div class="section-subtitle">Temwayaj kliyan nou yo</div>
             <div class="testimonials-grid">
-                <div class="testimonial-card"><img src="https://randomuser.me/api/portraits/women/42.jpg" class="testimonial-img" alt="Marie"><p>"Pwodwi REB Lokal se pi bon kalite mwen te jwenn. Mwen rekòmande ak tout kè mwen!"</p><h4>Marie Claire</h4><span>Jesyonnè magazen</span></div>
-                <div class="testimonial-card"><img src="https://randomuser.me/api/portraits/men/68.jpg" class="testimonial-img" alt="Jean"><p>"Travay trasabilite yo fè se eksepsyonèl. Mwen konnen kote pwodwi mwen soti."</p><h4>Jean Baptiste</h4><span>Kochf restauran</span></div>
-                <div class="testimonial-card"><img src="https://randomuser.me/api/portraits/women/30.jpg" class="testimonial-img" alt="Sophie"><p>"Farin bannann vèt yo se yon dekouvèt. Mwen itilize chak jou."</p><h4>Sophie Laurent</h4><span>Kliyan fidèl</span></div>
+                <div class="testimonial-card"><img src="https://randomuser.me/api/portraits/women/42.jpg" class="testimonial-img" alt="Marie"><p>"Pwodwi REB Lokal se pi bon kalite mwen te jwenn."</p><h4>Marie Claire</h4><span>Jesyonnè magazen</span></div>
+                <div class="testimonial-card"><img src="https://randomuser.me/api/portraits/men/68.jpg" class="testimonial-img" alt="Jean"><p>"Travay trasabilite yo fè se eksepsyonèl."</p><h4>Jean Baptiste</h4><span>Kochf restauran</span></div>
+                <div class="testimonial-card"><img src="https://randomuser.me/api/portraits/women/30.jpg" class="testimonial-img" alt="Sophie"><p>"Farin bannann vèt yo se yon dekouvèt."</p><h4>Sophie Laurent</h4><span>Kliyan fidèl</span></div>
             </div>
         </div>
     </section>
@@ -450,7 +696,7 @@
                 <div class="pdg-text">
                     <h3>Rebetha CHARLES</h3>
                     <div class="pdg-title">Prezidan Direktè Jeneral (PDG)</div>
-                    <p>“Depi kreyasyon REB Lokal, objektif prensipal nou se mete pwodwi agrikòl Ayisyen yo devan, ak yon bon jan kalite ki ka fè konpetisyon entènasyonal. Nou kwè ke tè nou, kilti nou, ak konesans tradisyonèl nou se richès ki dwe valè. Chak pwodwi ki soti nan men nou se rezilta yon travay ekip, respektans, ak pasyon. Mwen envite tout moun ki renmen bon manje ak bon pwodwi lokal yo vin jwenn nou nan eksperyans REB Lokal.”</p>
+                    <p>“Depi kreyasyon REB Lokal, objektif prensipal nou se mete pwodwi agrikòl Ayisyen yo devan. Chak pwodwi ki soti nan men nou se rezilta yon travay ekip, respektans, ak pasyon.”</p>
                     <div class="pdg-signature">— Rebetha CHARLES</div>
                 </div>
             </div>
@@ -464,10 +710,10 @@
             <div class="contact-wrapper">
                 <div class="contact-info">
                     <h3><i class="fas fa-phone-alt"></i> Enfòmasyon</h3>
-                    <p><i class="fas fa-phone"></i> <strong>Telefòn:</strong> +509 12 34 56 78</p>
-                    <p><i class="fas fa-map-marker-alt"></i> <strong>Adrès:</strong> Jeremi, Grandans, Ayiti</p>
-                    <p><i class="fas fa-clock"></i> <strong>Lè ouvèti:</strong> Lendi - Vandredi: 8:00 - 17:00<br>Samdi: 9:00 - 14:00</p>
-                    <p><i class="fas fa-envelope"></i> <strong>Imel:</strong> info@reblokal.com</p>
+                    <p><i class="fas fa-phone"></i> +509 12 34 56 78</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Jeremi, Grandans, Ayiti</p>
+                    <p><i class="fas fa-clock"></i> Lendi - Vandredi: 8h - 17h<br>Samdi: 9h - 14h</p>
+                    <p><i class="fas fa-envelope"></i> info@reblokal.com</p>
                 </div>
                 <div class="contact-form">
                     <form id="whatsappForm">
@@ -476,9 +722,9 @@
                         <input type="email" id="wa_email" placeholder="Adrès imel" required>
                         <input type="tel" id="wa_phone" placeholder="Telefòn" required>
                         <textarea id="wa_message" rows="2" placeholder="Mesaj / Pwojè kolaborasyon" required></textarea>
-                        <button type="submit"><i class="fab fa-whatsapp"></i> Voye mesaj via WhatsApp</button>
+                        <button type="submit"><i class="fab fa-whatsapp"></i> Voye via WhatsApp</button>
                     </form>
-                    <p id="waFeedback" style="margin-top:0.8rem; font-size:0.8rem; text-align:center;"></p>
+                    <p id="waFeedback" style="margin-top:0.6rem; font-size:0.7rem; text-align:center;"></p>
                 </div>
             </div>
         </div>
@@ -487,23 +733,23 @@
 <footer>
     <div class="container">
         <div class="social-icons">
-            <a href="#" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
-            <a href="#" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
         </div>
         <p>© 2025 REB LOKAL — Ekselans agrikòl ayisyen. Tout dwa rezève.</p>
     </div>
 </footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    // Pwodwi
+    // Données produits
     const products = [
         { name: "Ji Kann", desc: "Ji kann natirèl, fre e rafrechisan.", category: "Ji", img: "jikann.jpg" },
         { name: "Poud Jenjanm", desc: "Poud jenjanm natirèl, fèt ak rasin jenjanm sèk.", category: "Epis", img: "poud jenjanm.jpg" },
         { name: "Diri Shela", desc: "Diri Shela bon jan kalite, soti nan plenn Artibonite.", category: "Riz", img: "diri shela.jpg" },
         { name: "Boul Chokolat", desc: "Boul chokola natirèl, fèt ak kakawo peyi Ayiti.", category: "Kakao", img: "boul chocola.jpg" },
         { name: "Pwa Kongo Vèt", desc: "Pwa kongo vèt fre, rekòlt lokal.", category: "Pwa", img: "pwa kongo vèt.jpg" },
-        { name: "Kremas Jenjanm", desc: "Kremas jenjanm, bwason tradisyonèl ak jenjanm fre.", category: "Kremas", img: "kremas jenjanm.jpg" },
+        { name: "Kremas Jenjanm", desc: "Kremas jenjanm, bwason tradisyonèl.", category: "Kremas", img: "kremas jenjanm.jpg" },
         { name: "Kremas Grenadya", desc: "Kremas grenadya, fèt ak fwi grenadya.", category: "Kremas", img: "kremas grenadya.jpg" },
         { name: "Kremas Kafe", desc: "Kremas kafe, melanj kafe ak lèt.", category: "Kremas", img: "kremas kafe.jpg" }
     ];
@@ -527,7 +773,7 @@
                     <h4>${p.name}</h4>
                     <div class="product-desc">${p.desc}</div>
                     <div class="card-buttons">
-                        <button class="btn-dual find-location" data-product="${p.name}"><i class="fas fa-map-pin"></i> Ki kote pou jwenn?</button>
+                        <button class="btn-dual find-location" data-product="${p.name}"><i class="fas fa-map-pin"></i> Ki kote?</button>
                         <button class="btn-dual whatsapp-order" data-product="${p.name}"><i class="fab fa-whatsapp"></i> Kòmande</button>
                     </div>
                 </div>
@@ -537,13 +783,13 @@
         document.querySelectorAll('.find-location').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.getElementById('partenaires').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                setTimeout(() => { if (window.markers) window.markers.forEach(m => m.openPopup()); }, 500);
+                setTimeout(() => { if (window.markers) window.markers.forEach(m => m.openPopup()); }, 400);
             });
         });
         document.querySelectorAll('.whatsapp-order').forEach(btn => {
             btn.addEventListener('click', () => {
                 const product = btn.getAttribute('data-product');
-                window.open(`https://wa.me/50912345678?text=Bonjour%2C%20mwen%20ta%20renmen%20kòmande%20${encodeURIComponent(product)}%20nan%20REB%20Lokal.`, '_blank', 'noopener,noreferrer');
+                window.open(`https://wa.me/50912345678?text=Bonjour%2C%20mwen%20ta%20renmen%20kòmande%20${encodeURIComponent(product)}%20nan%20REB%20Lokal.`, '_blank');
             });
         });
     }
@@ -557,15 +803,15 @@
     });
     renderProducts('all');
 
-    // Kat Leaflet
+    // Carte Leaflet
     const map = L.map('map').setView([18.5944, -72.3074], 8);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> & CartoDB',
         subdomains: 'abcd',
         maxZoom: 18
     }).addTo(map);
-    const goldIcon = L.divIcon({ className: 'custom-pin', html: '<i class="fas fa-map-marker-alt" style="font-size:24px;color:#CDA75C;"></i>', iconSize: [24,24], popupAnchor: [0,-12] });
-    const usineIcon = L.divIcon({ className: 'custom-pin', html: '<i class="fas fa-industry" style="font-size:24px;color:#DC3545;"></i>', iconSize: [24,24], popupAnchor: [0,-12] });
+    const goldIcon = L.divIcon({ className: 'custom-pin', html: '<i class="fas fa-map-marker-alt" style="font-size:22px;color:#CDA75C;"></i>', iconSize: [22,22], popupAnchor: [0,-11] });
+    const usineIcon = L.divIcon({ className: 'custom-pin', html: '<i class="fas fa-industry" style="font-size:22px;color:#DC3545;"></i>', iconSize: [22,22], popupAnchor: [0,-11] });
     const markers = [];
     const locations = [
         [18.5392, -72.3350, "Kap Ayisyen — REB Boutique"],
@@ -583,10 +829,10 @@
     markers.push(usine);
     window.markers = markers;
 
-    // Fòmilè WhatsApp
+    // Formulaire WhatsApp
     const form = document.getElementById('whatsappForm');
     const feedback = document.getElementById('waFeedback');
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
         const name = document.getElementById('wa_name').value.trim();
         const company = document.getElementById('wa_company').value.trim();
@@ -594,21 +840,30 @@
         const phone = document.getElementById('wa_phone').value.trim();
         const msg = document.getElementById('wa_message').value.trim();
         if (!name || !company || !email || !phone || !msg) {
-            feedback.innerHTML = '<span style="color:#C15A3D;">⚠️ Tanpri ranpli tout champs obligatwa yo.</span>';
-            return;
-        }
-        if (!email.includes('@') || !email.includes('.')) {
-            feedback.innerHTML = '<span style="color:#C15A3D;">⚠️ Adrès imel pa valab.</span>';
+            feedback.innerHTML = '<span style="color:#C15A3D;">⚠️ Ranpli tout champs.</span>';
             return;
         }
         const text = `Bonjour REB Lokal,%0A%0A*Nouvo demann patnè*%0A%0A*Non:* ${encodeURIComponent(name)}%0A*Antrepriz:* ${encodeURIComponent(company)}%0A*Imel:* ${encodeURIComponent(email)}%0A*Telefòn:* ${encodeURIComponent(phone)}%0A*Mesaj:* ${encodeURIComponent(msg)}`;
-        window.open(`https://wa.me/50912345678?text=${text}`, '_blank', 'noopener,noreferrer');
-        feedback.innerHTML = '<span style="color:#25D366;">✅ Redirect sou WhatsApp. Mèsi!</span>';
-        setTimeout(() => feedback.innerHTML = '', 4000);
+        window.open(`https://wa.me/50912345678?text=${text}`, '_blank');
+        feedback.innerHTML = '<span style="color:#25D366;">✅ Redirect sou WhatsApp.</span>';
+        setTimeout(() => feedback.innerHTML = '', 3000);
         form.reset();
     });
 
-    // Animasyon reveal
+    // Menu hamburger
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('open');
+    });
+    // Ferme menu après clic sur lien
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('open');
+        });
+    });
+
+    // Animations reveal
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -617,60 +872,24 @@
     }, { threshold: 0.1 });
     reveals.forEach(el => observer.observe(el));
 
-    // Smooth scroll
-    document.querySelectorAll('.nav-links a, .logo-link, .btn-terracotta, .btn-outline-gold').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (href && href.startsWith('#')) {
-                e.preventDefault();
-                const target = document.getElementById(href.substring(1));
-                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    });
-
-    // Son videyo
+    // Son vidéo
     const video = document.getElementById('heroVideo');
     const unmuteBtn = document.getElementById('unmuteBtn');
     if (video && unmuteBtn) {
         video.addEventListener('loadeddata', () => {
-            if (video.muted) {
-                unmuteBtn.style.display = 'flex';
-            }
+            if (video.muted) unmuteBtn.style.display = 'flex';
         });
         unmuteBtn.addEventListener('click', () => {
             video.muted = false;
-            video.volume = 0.5;
+            video.volume = 0.4;
             unmuteBtn.style.display = 'none';
         });
     }
 </script>
 <style>
     .custom-pin { background: transparent; border: none; }
-    .leaflet-popup-content-wrapper { background: var(--forest-riche); color: white; border-radius: 12px; border-left: 4px solid var(--aged-gold); }
+    .leaflet-popup-content-wrapper { background: var(--forest-riche); color: white; border-radius: 16px; border-left: 3px solid var(--aged-gold); }
     .leaflet-popup-tip { background: var(--forest-riche); }
-    .unmute-btn {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        background: rgba(0,0,0,0.7);
-        color: white;
-        border: none;
-        border-radius: 30px;
-        padding: 5px 10px;
-        font-size: 11px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        z-index: 10;
-    }
-    .unmute-btn:hover {
-        background: var(--terracotta);
-    }
-    .hero-video {
-        position: relative;
-    }
 </style>
 </body>
 </html>
