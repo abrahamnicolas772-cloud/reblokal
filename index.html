@@ -8,11 +8,10 @@
     <title>REB Lokal | Ekselans Agrikòl Ayisyen</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        /* ---------- RESET & VARIABLES ---------- */
         * {
             margin: 0;
             padding: 0;
@@ -28,19 +27,24 @@
             --cream-bg: #FBF7F0;
             --text-light: #FEFCF8;
             --text-muted: #D4CFC4;
-            --border-gold-light: rgba(205, 167, 92, 0.25);
-            --shadow-md: 0 20px 35px -12px rgba(0,0,0,0.4);
-            --transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            --border-gold-light: rgba(205, 167, 92, 0.3);
+            --glow-gold: rgba(205, 167, 92, 0.5);
+            --glow-terracotta: rgba(193, 90, 61, 0.4);
+            --shadow-sm: 0 8px 20px rgba(0,0,0,0.3);
+            --shadow-md: 0 20px 35px -8px rgba(0,0,0,0.5);
+            --shadow-glow: 0 0 15px rgba(205,167,92,0.3);
+            --transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             --green-wa: #25D366;
         }
         body {
             background-color: var(--forest-deep);
             color: var(--text-light);
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
             line-height: 1.5;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
+        /* Grille de fond futuriste */
         body::before {
             content: "";
             position: fixed;
@@ -48,13 +52,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(rgba(205,167,92,0.03) 1px, transparent 1px);
+            background-image: 
+                linear-gradient(rgba(205,167,92,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(205,167,92,0.03) 1px, transparent 1px);
             background-size: 40px 40px;
             pointer-events: none;
             z-index: -1;
         }
         h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Space Grotesk', monospace;
             font-weight: 600;
             letter-spacing: -0.02em;
         }
@@ -62,25 +68,37 @@
             font-size: clamp(2rem, 5vw, 2.8rem);
             color: var(--aged-gold);
             margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--terracotta), var(--aged-gold));
+            border-radius: 3px;
         }
         .section-subtitle {
             color: var(--text-muted);
             font-size: 1rem;
-            border-left: 3px solid var(--terracotta);
             padding-left: 1rem;
             margin-bottom: 2rem;
+            border-left: 3px solid var(--terracotta);
         }
         .container {
             max-width: 1300px;
             margin: 0 auto;
             padding: 0 1.5rem;
         }
-        /* ---------- NAVBAR ---------- */
+        /* Glassmorphisme navbar */
         .navbar {
             position: sticky;
             top: 0;
             backdrop-filter: blur(12px);
-            background: rgba(10, 29, 23, 0.92);
+            background: rgba(10, 29, 23, 0.7);
             border-bottom: 1px solid var(--border-gold-light);
             z-index: 1000;
             padding: 0.8rem 0;
@@ -93,12 +111,13 @@
             gap: 1rem;
         }
         .logo-img {
-            height: 70px;
+            height: 50px;
             width: auto;
-            transition: transform 0.2s;
+            filter: drop-shadow(0 0 8px var(--glow-gold));
+            transition: transform 0.3s;
         }
         .logo-img:hover {
-            transform: scale(1.02);
+            transform: scale(1.05);
         }
         .nav-links {
             display: flex;
@@ -111,6 +130,20 @@
             font-weight: 500;
             transition: color 0.2s;
             font-size: 0.95rem;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--aged-gold);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
         }
         .nav-links a:hover {
             color: var(--aged-gold);
@@ -128,18 +161,20 @@
             align-items: center;
             gap: 0.5rem;
             white-space: nowrap;
+            box-shadow: 0 0 8px rgba(37,211,102,0.4);
         }
         .btn-achte:hover {
             background: #1da15b;
             transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(37,211,102,0.6);
         }
-        /* ---------- HERO ---------- */
+        /* Hero */
         .hero {
             min-height: 85vh;
             display: flex;
             align-items: center;
             padding: 2rem 0;
-            background: linear-gradient(115deg, rgba(10,29,23,0.85), rgba(15,42,33,0.75)), url('champ.jpg');
+            background: linear-gradient(115deg, rgba(10,29,23,0.9), rgba(15,42,33,0.8)), url('champ.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -159,7 +194,7 @@
         .hero h1 {
             font-size: clamp(2rem, 6vw, 3.5rem);
             color: white;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 15px rgba(0,0,0,0.5);
             margin-bottom: 1rem;
         }
         .hero p {
@@ -184,10 +219,12 @@
             gap: 0.6rem;
             transition: var(--transition);
             font-size: 0.9rem;
+            box-shadow: 0 4px 12px var(--glow-terracotta);
         }
         .btn-terracotta:hover {
             background: var(--terracotta-dark);
             transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--glow-terracotta);
         }
         .btn-outline-gold {
             background: transparent;
@@ -202,11 +239,13 @@
             gap: 0.6rem;
             transition: var(--transition);
             font-size: 0.9rem;
+            backdrop-filter: blur(4px);
         }
         .btn-outline-gold:hover {
             background: var(--aged-gold);
             color: var(--forest-deep);
             transform: translateY(-3px);
+            box-shadow: 0 0 12px var(--glow-gold);
         }
         .hero-video {
             flex: 1;
@@ -215,6 +254,7 @@
             border: 2px solid var(--aged-gold);
             background: #000;
             min-height: 320px;
+            box-shadow: 0 0 20px rgba(205,167,92,0.3);
         }
         .hero-video video {
             width: 100%;
@@ -222,10 +262,12 @@
             object-fit: cover;
             display: block;
         }
-        /* ---------- PARTENAIRES ---------- */
+        /* Partenaires */
+        .partners-section, .catalogue-section, .testimonials-section {
+            background: var(--cream-bg);
+        }
         .partners-section {
             padding: 2rem 0;
-            background: var(--cream-bg);
         }
         .partners-header {
             text-align: center;
@@ -234,10 +276,6 @@
         .partners-header h3 {
             font-size: 1.5rem;
             color: var(--terracotta);
-        }
-        .partners-header p {
-            color: var(--forest-medium);
-            font-size: 0.85rem;
         }
         .partners-logos {
             display: flex;
@@ -250,6 +288,7 @@
             padding: 0.5rem 1.2rem;
             border-radius: 16px;
             transition: all 0.3s;
+            backdrop-filter: blur(2px);
         }
         .partner-logo:hover {
             background: rgba(0,0,0,0.08);
@@ -258,11 +297,12 @@
         .partner-logo img {
             max-height: 45px;
             width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
-        /* ---------- SAVOIR-FAIRE ---------- */
+        /* Savoir-faire */
         .savoir-section {
             padding: 4rem 0;
-            background: linear-gradient(135deg, var(--forest-deep), var(--forest-riche));
+            background: radial-gradient(circle at 30% 20%, var(--forest-riche), var(--forest-deep));
         }
         .savoir-grid {
             display: flex;
@@ -275,14 +315,9 @@
             border-radius: 24px;
             overflow: hidden;
             box-shadow: var(--shadow-md);
-        }
-        .savoir-image img {
-            width: 100%;
-            height: auto;
-            display: block;
             transition: transform 0.4s;
         }
-        .savoir-image:hover img {
+        .savoir-image:hover {
             transform: scale(1.02);
         }
         .savoir-text {
@@ -293,43 +328,23 @@
             color: var(--aged-gold);
             margin-bottom: 1rem;
         }
-        .savoir-intro {
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-        .gold-bullet {
-            list-style: none;
-        }
         .gold-bullet li {
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 1rem;
-            background: rgba(205,167,92,0.08);
+            background: rgba(205,167,92,0.1);
+            backdrop-filter: blur(4px);
             padding: 0.7rem 1rem;
             border-radius: 16px;
-            transition: background 0.2s;
+            border: 1px solid var(--border-gold-light);
+            transition: all 0.2s;
         }
         .gold-bullet li:hover {
-            background: rgba(205,167,92,0.15);
+            background: rgba(205,167,92,0.2);
+            transform: translateX(5px);
         }
-        .gold-bullet i {
-            color: var(--aged-gold);
-            font-size: 1.2rem;
-            width: 28px;
-        }
-        /* ---------- CATALOGUE AVEC FILTRES ---------- */
-        .catalogue-section {
-            padding: 4rem 0;
-            background: var(--cream-bg);
-        }
-        .catalogue-section h2 {
-            color: var(--terracotta);
-        }
-        .catalogue-section .section-subtitle {
-            color: var(--forest-medium);
-        }
+        /* Catalogue */
         .filter-buttons {
             display: flex;
             flex-wrap: wrap;
@@ -347,10 +362,12 @@
             cursor: pointer;
             transition: var(--transition);
             font-size: 0.85rem;
+            backdrop-filter: blur(4px);
         }
         .filter-btn:hover, .filter-btn.active {
             background: var(--terracotta);
             color: white;
+            box-shadow: 0 0 10px var(--glow-terracotta);
         }
         .catalogue-grid {
             display: grid;
@@ -358,15 +375,16 @@
             gap: 1.8rem;
         }
         .product-card {
-            background: white;
+            background: rgba(255,255,255,0.95);
             border-radius: 28px;
             overflow: hidden;
             transition: var(--transition);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.05);
         }
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.2), 0 0 0 2px var(--aged-gold);
         }
         .product-img {
             height: 220px;
@@ -379,21 +397,16 @@
             transition: transform 0.5s;
         }
         .product-card:hover .product-img img {
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
         .product-info {
             padding: 1.2rem;
         }
         .product-info h4 {
             font-size: 1.3rem;
-            font-family: 'Playfair Display', serif;
+            font-family: 'Space Grotesk', monospace;
             color: var(--terracotta);
             margin-bottom: 0.5rem;
-        }
-        .product-desc {
-            font-size: 0.8rem;
-            color: #555;
-            margin-bottom: 1rem;
         }
         .card-buttons {
             display: flex;
@@ -421,10 +434,10 @@
             background: var(--terracotta-dark);
             transform: scale(0.96);
         }
-        /* ---------- MAP ---------- */
+        /* Map */
         .map-section {
             padding: 4rem 0;
-            background: linear-gradient(135deg, var(--forest-deep), var(--forest-riche));
+            background: radial-gradient(circle at 70% 30%, var(--forest-riche), var(--forest-deep));
         }
         .map-container {
             border-radius: 28px;
@@ -432,26 +445,28 @@
             border: 2px solid var(--aged-gold);
             height: 380px;
             width: 100%;
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 0 20px rgba(205,167,92,0.3);
         }
         .map-info-text {
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             backdrop-filter: blur(8px);
             border-radius: 20px;
             padding: 0.8rem 1.2rem;
             margin-top: 1.2rem;
             text-align: center;
             border-left: 4px solid var(--aged-gold);
-            font-size: 0.85rem;
         }
-        /* ---------- TEMOIGNAGES ---------- */
+        /* Témoignages - grille corrigée */
         .testimonials-section {
             padding: 4rem 0;
             background: var(--cream-bg);
         }
         .testimonials-section h2 {
-            color: var(--terracotta);
             text-align: center;
+        }
+        .testimonials-section h2::after {
+            left: 50%;
+            transform: translateX(-50%);
         }
         .testimonials-section .section-subtitle {
             text-align: center;
@@ -464,14 +479,16 @@
             gap: 2rem;
         }
         .testimonial-card {
-            background: white;
+            background: rgba(255,255,255,0.95);
             border-radius: 28px;
             padding: 1.5rem;
             text-align: center;
-            transition: transform 0.3s;
+            transition: var(--transition);
+            backdrop-filter: blur(2px);
         }
         .testimonial-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1), 0 0 0 1px var(--aged-gold);
         }
         .testimonial-img {
             width: 80px;
@@ -480,6 +497,7 @@
             object-fit: cover;
             margin: 0 auto 1rem;
             border: 3px solid var(--terracotta);
+            box-shadow: 0 0 8px var(--glow-gold);
         }
         .testimonial-card p {
             font-style: italic;
@@ -489,90 +507,56 @@
         }
         .testimonial-card h4 {
             color: var(--terracotta);
-            font-family: 'Playfair Display', serif;
+            font-family: 'Space Grotesk', monospace;
             font-size: 1.1rem;
         }
         .testimonial-card span {
             font-size: 0.75rem;
             color: #777;
         }
-        /* ---------- PDG ---------- */
+        /* PDG */
         .pdg-section {
             padding: 4rem 0;
-            background: linear-gradient(135deg, var(--forest-deep), var(--forest-riche));
-            border-top: 1px solid var(--border-gold-light);
-            border-bottom: 1px solid var(--border-gold-light);
+            background: radial-gradient(circle at 30% 50%, var(--forest-deep), var(--forest-riche));
         }
         .pdg-wrapper {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             gap: 2rem;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(4px);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
             border-radius: 32px;
             padding: 2rem;
-        }
-        .pdg-image {
-            flex: 1;
-            text-align: center;
+            border: 1px solid var(--border-gold-light);
         }
         .pdg-image img {
             max-width: 200px;
             width: 100%;
             border-radius: 50%;
             border: 5px solid var(--terracotta);
-            box-shadow: var(--shadow-md);
-            background: #1a1a1a;
+            box-shadow: 0 0 20px var(--glow-terracotta);
             object-fit: contain;
             aspect-ratio: 1/1;
+            background: #1a1a1a;
         }
-        .pdg-text {
-            flex: 2;
-        }
-        .pdg-text h3 {
-            font-size: 1.8rem;
-            color: var(--aged-gold);
-        }
-        .pdg-title {
-            color: var(--terracotta);
-            margin-bottom: 1rem;
-            font-weight: 500;
-        }
-        .pdg-text p {
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-        .pdg-signature {
-            margin-top: 1rem;
-            font-style: italic;
-            color: var(--aged-gold);
-        }
-        /* ---------- CONTACT ---------- */
+        /* Contact */
         .contact-section {
             padding: 3rem 0;
             background: var(--forest-deep);
         }
-        .contact-header {
-            margin-bottom: 2rem;
-        }
         .contact-header h2 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            color: var(--aged-gold);
-            margin-bottom: 0;
             text-align: left;
         }
         .contact-wrapper {
             display: flex;
             flex-wrap: wrap;
             gap: 2rem;
-            background: var(--forest-medium);
+            background: rgba(20,56,45,0.8);
+            backdrop-filter: blur(8px);
             border-radius: 32px;
             padding: 2rem;
-        }
-        .contact-info {
-            flex: 1;
-            min-width: 220px;
+            border: 1px solid var(--border-gold-light);
         }
         .contact-info h3 {
             font-size: 1.5rem;
@@ -590,24 +574,22 @@
             width: 24px;
             color: var(--terracotta);
         }
-        .contact-form {
-            flex: 1.5;
-            min-width: 260px;
-        }
         .contact-form input, .contact-form textarea {
             width: 100%;
             padding: 0.75rem;
-            background: rgba(10,29,23,0.8);
+            background: rgba(10,29,23,0.9);
             border: 1px solid var(--border-gold-light);
             border-radius: 20px;
             color: white;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
             margin-bottom: 1rem;
+            transition: 0.2s;
         }
         .contact-form input:focus, .contact-form textarea:focus {
             outline: none;
             border-color: var(--terracotta);
+            box-shadow: 0 0 8px var(--glow-terracotta);
         }
         .contact-form button {
             background: var(--terracotta);
@@ -623,12 +605,13 @@
         .contact-form button:hover {
             background: var(--terracotta-dark);
             transform: translateY(-2px);
+            box-shadow: 0 0 12px var(--glow-terracotta);
         }
-        /* ---------- FOOTER ---------- */
         footer {
             background: #071712;
             padding: 2rem 0;
             text-align: center;
+            border-top: 1px solid var(--border-gold-light);
         }
         .social-icons {
             display: flex;
@@ -645,7 +628,6 @@
             color: var(--terracotta);
             transform: translateY(-3px);
         }
-        /* ---------- ANIMATIONS ---------- */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -659,7 +641,7 @@
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* ---------- RESPONSIVE ---------- */
+        /* Responsive */
         @media (max-width: 900px) {
             .nav-container {
                 justify-content: center;
@@ -696,6 +678,14 @@
             .contact-header h2 {
                 text-align: center;
             }
+            .contact-header h2::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            h2::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
         }
         @media (max-width: 600px) {
             .container {
@@ -731,7 +721,6 @@
     </div>
 </nav>
 <main>
-    <!-- Hero -->
     <section id="akèy" class="hero">
         <div class="container">
             <div class="hero-content">
@@ -748,7 +737,6 @@
         </div>
     </section>
 
-    <!-- Partenaires -->
     <section class="partners-section reveal">
         <div class="container">
             <div class="partners-header"><h3>Nou fè konfyans</h3><p>Yo chwazi REB Lokal pou bon jan kalite ak trasabilite</p></div>
@@ -759,7 +747,6 @@
         </div>
     </section>
 
-    <!-- Savoir-faire -->
     <section id="savoir-faire" class="savoir-section reveal">
         <div class="container">
             <div class="savoir-grid">
@@ -778,7 +765,6 @@
         </div>
     </section>
 
-    <!-- Catalogue interactif -->
     <section id="catalogue" class="catalogue-section reveal">
         <div class="container">
             <h2>Katalòg entèraktif</h2>
@@ -796,7 +782,6 @@
         </div>
     </section>
 
-    <!-- Carte partenaires -->
     <section id="partenaires" class="map-section reveal">
         <div class="container">
             <h2>Patenè nou yo</h2>
@@ -806,7 +791,7 @@
         </div>
     </section>
 
-    <!-- Témoignages -->
+    <!-- Section témoignages avec grille corrigée -->
     <section class="testimonials-section reveal">
         <div class="container">
             <h2>Sa yo di</h2>
@@ -819,11 +804,10 @@
         </div>
     </section>
 
-    <!-- PDG -->
     <section class="pdg-section reveal">
         <div class="container">
             <div class="pdg-wrapper">
-                <div class="pdg-image"><img src="pdg.png" alt="Rebetha CHARLES"></div>
+                <div class="pdg-image"><img src="pdg.jpg" alt="Rebetha CHARLES"></div>
                 <div class="pdg-text">
                     <h3>Rebetha CHARLES</h3>
                     <div class="pdg-title">Prezidan Direktè Jeneral (PDG)</div>
@@ -834,7 +818,6 @@
         </div>
     </section>
 
-    <!-- Contact -->
     <section id="contact" class="contact-section reveal">
         <div class="container">
             <div class="contact-header">
@@ -870,12 +853,12 @@
             <a href="#" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
             <a href="#" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
         </div>
-        <p>© 2025 REB LOKAL — by Nicolas Abraham - Ekselans agrikòl ayisyen. Tout dwa rezève.</p>
+        <p>© 2025 REB LOKAL — Ekselans agrikòl ayisyen. Tout dwa rezève.</p>
     </div>
 </footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    // Liste des produits
+    // Produits
     const products = [
         { name: "Ji Kann", desc: "Ji kann natirèl, fre e rafrechisan.", category: "Ji", img: "jikann.jpg" },
         { name: "Poud Jenjanm", desc: "Poud jenjanm natirèl, fèt ak rasin jenjanm sèk.", category: "Epis", img: "poud jenjanm.jpg" },
@@ -913,7 +896,6 @@
             `;
             productGrid.appendChild(card);
         });
-        // Événements des boutons
         document.querySelectorAll('.find-location').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.getElementById('partenaires').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -944,8 +926,8 @@
         subdomains: 'abcd',
         maxZoom: 18
     }).addTo(map);
-    const goldIcon = L.divIcon({ className: 'custom-pin', html: '<i class="fas fa-map-marker-alt" style="font-size:24px;color:#CDA75C;"></i>', iconSize: [24,24], popupAnchor: [0,-12] });
-    const usineIcon = L.divIcon({ className: 'custom-pin', html: '<i class="fas fa-industry" style="font-size:24px;color:#DC3545;"></i>', iconSize: [24,24], popupAnchor: [0,-12] });
+    const goldIcon = L.divIcon({ className: 'custom-pin', html: '<i class="fas fa-map-marker-alt" style="font-size:24px;color:#CDA75C;filter:drop-shadow(0 0 4px black);"></i>', iconSize: [24,24], popupAnchor: [0,-12] });
+    const usineIcon = L.divIcon({ className: 'custom-pin', html: '<i class="fas fa-industry" style="font-size:24px;color:#DC3545;filter:drop-shadow(0 0 4px black);"></i>', iconSize: [24,24], popupAnchor: [0,-12] });
     const markers = [];
     const locations = [
         [18.5392, -72.3350, "Kap Ayisyen — REB Boutique"],
@@ -988,7 +970,7 @@
         form.reset();
     });
 
-    // Animations reveal
+    // Animations
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1011,7 +993,7 @@
 </script>
 <style>
     .custom-pin { background: transparent; border: none; }
-    .leaflet-popup-content-wrapper { background: var(--forest-riche); color: white; border-radius: 12px; border-left: 4px solid var(--aged-gold); }
+    .leaflet-popup-content-wrapper { background: var(--forest-riche); color: white; border-radius: 12px; border-left: 4px solid var(--aged-gold); box-shadow: 0 0 15px rgba(0,0,0,0.3); }
     .leaflet-popup-tip { background: var(--forest-riche); }
 </style>
 </body>
